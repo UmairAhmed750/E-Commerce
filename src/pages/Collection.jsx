@@ -81,7 +81,7 @@ const Collection = () => {
   }, [sortType]);
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
@@ -104,11 +104,11 @@ const Collection = () => {
           <div className='flex flex-col gap-2.5 text-sm font-light text-gray-700 dark:text-gray-300'>
             {['Men', 'Women', 'Kids'].map((cat) => (
               <label key={cat} className='flex items-center gap-2.5 cursor-pointer hover:text-orange-600 dark:hover:text-orange-400 transition-colors'>
-                <input 
-                  className='w-4 h-4 accent-orange-500 rounded cursor-pointer' 
-                  type="checkbox" 
-                  value={cat} 
-                  onChange={toggleCategory} 
+                <input
+                  className='w-4 h-4 accent-orange-500 rounded cursor-pointer'
+                  type="checkbox"
+                  value={cat}
+                  onChange={toggleCategory}
                 />
                 <span>{cat}</span>
               </label>
@@ -122,11 +122,11 @@ const Collection = () => {
           <div className='flex flex-col gap-2.5 text-sm font-light text-gray-700 dark:text-gray-300'>
             {['Topwear', 'Bottomwear', 'Winterwear'].map((sub) => (
               <label key={sub} className='flex items-center gap-2.5 cursor-pointer hover:text-orange-600 dark:hover:text-orange-400 transition-colors'>
-                <input 
-                  className='w-4 h-4 accent-orange-500 rounded cursor-pointer' 
-                  type="checkbox" 
-                  value={sub} 
-                  onChange={toggleSubCategory} 
+                <input
+                  className='w-4 h-4 accent-orange-500 rounded cursor-pointer'
+                  type="checkbox"
+                  value={sub}
+                  onChange={toggleSubCategory}
                 />
                 <span>{sub}</span>
               </label>
@@ -139,10 +139,10 @@ const Collection = () => {
       <div className='flex-1'>
         <div className='flex justify-between items-center text-base sm:text-2xl mb-6'>
           <Tittle text1={'ALL'} text2={'COLLECTIONS'} />
-          
+
           {/* Product Sort Dropdown */}
-          <select 
-            onChange={(e) => setSortType(e.target.value)} 
+          <select
+            onChange={(e) => setSortType(e.target.value)}
             className='border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 text-xs sm:text-sm px-3 py-2 rounded-xl outline-none shadow-sm focus:border-orange-500 transition-all cursor-pointer font-medium'
           >
             <option value="relavent">Sort by: Relevant</option>
@@ -155,12 +155,12 @@ const Collection = () => {
         <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 gap-y-8'>
           {filterProducts.length > 0 ? (
             filterProducts.map((item, index) => (
-              <ProductItem 
-                key={item._id || index} 
-                name={item.name} 
-                id={item._id} 
-                price={item.price} 
-                image={item.image} 
+              <ProductItem
+                key={item._id || index}
+                name={item.name}
+                id={item._id}
+                price={item.price}
+                image={item.image}
               />
             ))
           ) : (

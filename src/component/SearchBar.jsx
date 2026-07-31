@@ -20,7 +20,7 @@ const SearchBar = () => {
   return (
     <AnimatePresence>
       {showSearch && visible && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
@@ -38,8 +38,8 @@ const SearchBar = () => {
             />
             <Search className='w-4 h-4 text-gray-500 dark:text-gray-400' />
           </div>
-          
-          <button 
+
+          <button
             onClick={() => setShowSearch(false)}
             className='p-2 rounded-full hover:bg-gray-200/60 dark:hover:bg-gray-800/60 transition-colors text-gray-500 dark:text-gray-400'
             title="Close Search"

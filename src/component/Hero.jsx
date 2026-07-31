@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { assets } from '../assets/frontend_assets/assets';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, ArrowRight, Star, ShieldCheck, Truck, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const words = [
+  'Luxury Fashion',
+  'Urban Streetwear',
+  'Timeless Elegance',
+  'Signature Styles',
+  'Seasonal Trends'
+];
+
 const Hero = () => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % words.length);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: 'easeOut' }}
@@ -20,7 +37,7 @@ const Hero = () => {
       <div className='w-full lg:w-1/2 flex items-center justify-center p-5 sm:p-8 lg:p-8 xl:p-10 z-10'>
         <div className='text-gray-800 dark:text-gray-100 max-w-lg'>
           {/* Animated Badge */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -30,15 +47,26 @@ const Hero = () => {
             <span>EXCLUSIVELY CURATED FOR YOU</span>
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className='prata-regular text-2xl sm:text-3xl lg:text-3xl xl:text-4xl leading-[1.12] font-medium my-1.5 tracking-tight text-gray-900 dark:text-white'
+            className='prata-regular text-2xl sm:text-3xl lg:text-3xl xl:text-4xl leading-[1.2] font-medium my-1.5 tracking-tight text-gray-900 dark:text-white'
           >
             Redefining Modern <br />
-            <span className='bg-gradient-to-r from-orange-600 via-amber-500 to-orange-500 bg-clip-text text-transparent italic font-serif'>
-              Luxury Fashion
+            <span className="inline-block relative h-[1.25em] overflow-hidden align-bottom min-w-[220px] sm:min-w-[280px]">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={words[index]}
+                  initial={{ y: 25, opacity: 0, filter: 'blur(4px)' }}
+                  animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
+                  exit={{ y: -25, opacity: 0, filter: 'blur(4px)' }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  className='bg-gradient-to-r from-orange-600 via-amber-500 to-orange-500 bg-clip-text text-transparent italic font-serif block'
+                >
+                  {words[index]}
+                </motion.span>
+              </AnimatePresence>
             </span>
           </motion.h1>
 
@@ -52,22 +80,22 @@ const Hero = () => {
           </motion.p>
 
           {/* Action Buttons */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.55, duration: 0.5 }}
             className='flex flex-wrap items-center gap-2.5 pt-1 mb-4 lg:mb-5'
           >
-            <Link 
-              to='/collection' 
+            <Link
+              to='/collection'
               className='inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold text-xs sm:text-sm shadow-xl hover:shadow-orange-500/20 hover:scale-105 active:scale-95 transition-all duration-300 group'
             >
               <span>EXPLORE COLLECTION</span>
               <ArrowRight className='w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1.5' />
             </Link>
 
-            <a 
-              href='#bestsellers' 
+            <a
+              href='#bestsellers'
               className='inline-flex items-center gap-1.5 px-4 py-2.5 sm:px-5 sm:py-3 rounded-xl bg-white/80 dark:bg-gray-800/80 text-gray-800 dark:text-gray-200 font-medium text-xs sm:text-sm border border-gray-200 dark:border-gray-700 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-300'
             >
               <TrendingUp className='w-3.5 h-3.5 text-orange-500' />
@@ -102,14 +130,14 @@ const Hero = () => {
 
       {/* Hero Right Visual Banner */}
       <div className='w-full lg:w-1/2 relative overflow-hidden flex items-center justify-center p-2 lg:p-0 min-h-[260px] sm:min-h-[320px] lg:min-h-[380px] xl:min-h-[440px]'>
-        <motion.img 
+        <motion.img
           initial={{ scale: 1.1, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
           whileHover={{ scale: 1.03 }}
           className='w-full h-full object-cover rounded-2xl lg:rounded-none transition-transform duration-700 ease-out'
-          src={assets.hero_img} 
-          alt="Hero Luxury Banner" 
+          src={assets.hero_img}
+          alt="Hero Luxury Banner"
         />
         <div className='absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none' />
       </div>

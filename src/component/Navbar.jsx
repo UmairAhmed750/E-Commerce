@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { assets } from '../assets/frontend_assets/assets';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sun, Moon, Search, User, ShoppingBag, Menu, ChevronLeft, X } from 'lucide-react';
@@ -8,6 +8,8 @@ import { Sun, Moon, Search, User, ShoppingBag, Menu, ChevronLeft, X } from 'luci
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const { setShowSearch, getCartCounts, theme, toggleTheme } = useContext(ShopContext);
+  const location = useLocation();
+  const isCollectionPage = location.pathname.includes('collection');
 
   const navItemVariants = {
     hover: { scale: 1.08 },
@@ -15,7 +17,7 @@ const Navbar = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -23,10 +25,10 @@ const Navbar = () => {
     >
       {/* Brand Logo */}
       <Link to='/' className='relative group flex-shrink-0'>
-        <img 
-          src={assets.logo} 
-          className='w-28 sm:w-36 dark:invert transition-transform duration-300 group-hover:scale-105' 
-          alt="Forever Logo" 
+        <img
+          src={assets.logo}
+          className='w-28 sm:w-36 dark:invert transition-transform duration-300 group-hover:scale-105'
+          alt="Forever Logo"
         />
       </Link>
 
@@ -38,12 +40,11 @@ const Navbar = () => {
           { name: 'About', path: '/about' },
           { name: 'Contact', path: '/contact' }
         ].map((item) => (
-          <NavLink 
-            key={item.name} 
-            to={item.path} 
-            className={({ isActive }) => 
-              `relative flex flex-col items-center gap-1 py-1 px-2 rounded-md transition-colors duration-200 ${
-                isActive ? 'text-black dark:text-white font-semibold' : 'hover:text-black dark:hover:text-white'
+          <NavLink
+            key={item.name}
+            to={item.path}
+            className={({ isActive }) =>
+              `relative flex flex-col items-center gap-1 py-1 px-2 rounded-md transition-colors duration-200 ${isActive ? 'text-black dark:text-white font-semibold' : 'hover:text-black dark:hover:text-white'
               }`
             }
           >
@@ -51,7 +52,7 @@ const Navbar = () => {
               <>
                 <p>{item.name}</p>
                 {isActive && (
-                  <motion.hr 
+                  <motion.hr
                     layoutId='activeNavTab'
                     className='w-3/4 border-none h-[2px] bg-gradient-to-r from-orange-500 to-amber-500 rounded-full'
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
@@ -82,17 +83,19 @@ const Navbar = () => {
           )}
         </motion.button>
 
-        {/* Search Icon */}
-        <motion.button 
-          variants={navItemVariants}
-          whileHover="hover"
-          whileTap="tap"
-          onClick={() => setShowSearch(true)} 
-          className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200'
-          aria-label="Search"
-        >
-          <Search className="w-5 h-5 stroke-[2]" />
-        </motion.button>
+        {/* Search Icon (Only visible on /collection page) */}
+        {isCollectionPage && (
+          <motion.button
+            variants={navItemVariants}
+            whileHover="hover"
+            whileTap="tap"
+            onClick={() => setShowSearch(true)}
+            className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200'
+            aria-label="Search"
+          >
+            <Search className="w-5 h-5 stroke-[2]" />
+          </motion.button>
+        )}
 
         {/* Profile Icon with Dropdown */}
         <div className='group relative'>
@@ -101,9 +104,9 @@ const Navbar = () => {
               <User className="w-5 h-5 stroke-[2]" />
             </Link>
           </motion.div>
-          
+
           <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-2 z-50'>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               className='flex flex-col gap-2 w-40 py-3 px-5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800'
@@ -119,7 +122,7 @@ const Navbar = () => {
         <motion.div variants={navItemVariants} whileHover="hover" whileTap="tap">
           <Link to='/cart' className='relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200 block'>
             <ShoppingBag className="w-5 h-5 stroke-[2]" />
-            <motion.p 
+            <motion.p
               key={getCartCounts()}
               initial={{ scale: 0.6 }}
               animate={{ scale: 1 }}
@@ -131,9 +134,9 @@ const Navbar = () => {
         </motion.div>
 
         {/* Mobile Menu Toggle Button */}
-        <motion.button 
+        <motion.button
           whileTap={{ scale: 0.9 }}
-          onClick={() => setVisible(true)} 
+          onClick={() => setVisible(true)}
           className='p-2 rounded-lg sm:hidden hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-800 dark:text-gray-200'
           aria-label="Toggle Menu"
         >
@@ -146,7 +149,7 @@ const Navbar = () => {
         {visible && (
           <>
             {/* Backdrop Dim Overlay */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -155,7 +158,7 @@ const Navbar = () => {
             />
 
             {/* Solid Opaque Drawer */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: '100%' }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: '100%' }}
@@ -164,8 +167,8 @@ const Navbar = () => {
             >
               <div className='flex flex-col text-gray-800 dark:text-gray-100 h-full bg-white dark:bg-[#0b0f19]'>
                 {/* Back / Close Header */}
-                <div 
-                  onClick={() => setVisible(false)} 
+                <div
+                  onClick={() => setVisible(false)}
                   className='flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/60 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors'
                 >
                   <div className='flex items-center gap-2'>
@@ -183,16 +186,15 @@ const Navbar = () => {
                     { name: 'About', path: '/about' },
                     { name: 'Contact', path: '/contact' }
                   ].map((link) => (
-                    <NavLink 
+                    <NavLink
                       key={link.name}
-                      onClick={() => setVisible(false)} 
-                      className={({ isActive }) => 
-                        `py-4 px-6 text-base font-medium transition-colors flex items-center justify-between ${
-                          isActive 
-                            ? 'text-orange-600 dark:text-orange-400 bg-orange-50/80 dark:bg-orange-950/40 font-semibold' 
-                            : 'text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900/50'
+                      onClick={() => setVisible(false)}
+                      className={({ isActive }) =>
+                        `py-4 px-6 text-base font-medium transition-colors flex items-center justify-between ${isActive
+                          ? 'text-orange-600 dark:text-orange-400 bg-orange-50/80 dark:bg-orange-950/40 font-semibold'
+                          : 'text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-900/50'
                         }`
-                      } 
+                      }
                       to={link.path}
                     >
                       <span>{link.name}</span>
