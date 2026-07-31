@@ -72,6 +72,7 @@ import about_img from './about_img.png'
 import contact_img from './contact_img.png'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
+import p_img2 from './p_img2.png'
 import cross_icon from './cross_icon.png'
 
 export const assets = {
@@ -92,7 +93,59 @@ export const assets = {
     contact_img,
     razorpay_logo,
     stripe_logo,
-    cross_icon
+    cross_icon,
+    p_img1,
+    p_img2,
+    p_img3,
+    p_img4,
+    p_img5,
+    p_img6,
+    p_img7,
+    p_img8,
+    p_img9,
+    p_img10,
+    p_img11,
+    p_img12,
+    p_img13,
+    p_img14,
+    p_img15,
+    p_img16,
+    p_img17,
+    p_img18,
+    p_img19,
+    p_img20,
+    p_img21,
+    p_img22,
+    p_img23,
+    p_img24,
+    p_img25,
+    p_img26,
+    p_img27,
+    p_img28,
+    p_img29,
+    p_img30,
+    p_img31,
+    p_img32,
+    p_img33,
+    p_img34,
+    p_img35,
+    p_img36,
+    p_img37,
+    p_img38,
+    p_img39,
+    p_img40,
+    p_img41,
+    p_img42,
+    p_img43,
+    p_img44,
+    p_img45,
+    p_img46,
+    p_img47,
+    p_img48,
+    p_img49,
+    p_img50,
+    p_img51,
+    p_img52
 }
 
 export const products = [

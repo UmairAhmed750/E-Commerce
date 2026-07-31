@@ -2,33 +2,55 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import Tittle from './Title';
 import ProductItem from './ProductItem';
-import { assets } from '../assets/frontend_assets/assets';
+import { motion } from 'framer-motion';
 
 const BestSeller = () => {
-  const { product } = useContext(ShopContext);
+  const { products } = useContext(ShopContext);
   const [bestSeller, setBestSeller] = useState([]);
 
   useEffect(() => {
-    if (product && product.length) {
-      const bestProduct = product.filter((item) => item.bestSeller);
+    if (products && products.length) {
+      const bestProduct = products.filter((item) => item.bestseller);
       setBestSeller(bestProduct.slice(0, 5));
     }
-  }, [product]);
+  }, [products]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
 
   return (
-    <div className='my-10'>
-      <div className='text-center text-3xl py-8'>
+    <div className='my-16'>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className='text-center text-3xl py-8'
+      >
         <Tittle text1={'BEST'} text2={'SELLERS'} />
-        <p className='w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600'>
-          Choose words and descriptive adjectives that highlight the unique features of the clothing item
+        <p className='w-full sm:w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-500 dark:text-gray-400 font-light leading-relaxed mt-2'>
+          Explore our most coveted pieces loved by thousands of fashion enthusiasts around the globe.
         </p>
-      </div>
+      </motion.div>
 
-      <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 gap-y-6'>
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 gap-y-8'
+      >
         {bestSeller.length > 0 ? (
           bestSeller.map((item, index) => (
             <ProductItem
-              key={index}
+              key={item._id || index}
               id={item._id}
               image={item.image}
               name={item.name}
@@ -36,9 +58,9 @@ const BestSeller = () => {
             />
           ))
         ) : (
-          <p className='col-span-full text-center'>Loading...</p>
+          <div className='col-span-full text-center py-10 text-gray-400'>Loading best sellers...</div>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 };

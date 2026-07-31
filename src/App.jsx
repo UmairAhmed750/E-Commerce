@@ -12,10 +12,12 @@ import Orders from './pages/Orders'
 import Navbar from './component/Navbar'
 import Footer from './component/Footer'
 import SearchBar from './component/SearchBar'
+import ScrollToTop from './component/ScrollToTop'
 import { ToastContainer, toast } from 'react-toastify';
 const App = () => {
   return (
-    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw] bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300'>
+      <ScrollToTop />
       <ToastContainer />
       <Navbar />
       <SearchBar />

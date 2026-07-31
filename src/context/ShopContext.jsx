@@ -16,6 +16,24 @@ const ShopContextProvider = (props)=>{
   const [token,setToken] = useState('')
   const navigate = useNavigate()
 
+  const [theme, setTheme] = useState(
+    () => localStorage.getItem('theme') || 'light'
+  );
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
 const addToCart = async (itemId, size) => {
   if (!size) {
     toast.error('Select Product Size');
@@ -95,6 +113,9 @@ navigate,
 backendUrl: 'http://localhost:5000/', 
 setToken,
 token,
+theme,
+setTheme,
+toggleTheme,
 };
 
 

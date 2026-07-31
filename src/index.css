@@ -1,27 +1,83 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Prata&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Poppins:wght@100..900&family=Prata&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-a.active hr{
-    display: block;
+html {
+  scroll-behavior: smooth;
 }
-*{
-    font-family: outfit;
+
+body {
+  @apply bg-gray-50 text-gray-900 dark:bg-[#0b0f19] dark:text-gray-100 transition-colors duration-300 min-h-screen selection:bg-orange-500 selection:text-white;
 }
+
+* {
+  font-family: 'Outfit', sans-serif;
+}
+
 .prata-regular {
   font-family: "Prata", serif;
   font-weight: 400;
   font-style: normal;
 }
-::-webkit-scrollbar{
-  display: none;
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full hover:bg-gray-400 dark:hover:bg-gray-600;
 }
 
-@media (max-width:640px){
-  a.active{
-    background-color: black;
-    color: white;
+a.active hr {
+  display: block;
+}
+
+@media (max-width: 640px) {
+  a.active {
+    @apply bg-black dark:bg-white text-white dark:text-black rounded-lg;
   }
+}
+
+/* Glassmorphism & Custom Glow Effects */
+.glass-panel {
+  @apply bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border border-white/20 dark:border-gray-800/60 shadow-xl;
+}
+
+.glass-card {
+  @apply bg-white/60 dark:bg-gray-900/50 backdrop-blur-md border border-gray-200/60 dark:border-gray-800/60 shadow-sm hover:shadow-md transition-all duration-300;
+}
+
+.gradient-border {
+  position: relative;
+}
+.gradient-border::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(to right, rgba(249, 115, 22, 0.4), rgba(168, 85, 247, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.glow-orange {
+  box-shadow: 0 0 25px -5px rgba(249, 115, 22, 0.3);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
 }
