@@ -10,7 +10,7 @@ const categories = [
     id: 'Men',
     name: "Men's Collection",
     tagline: 'Tailored Suits & Urban Streetwear',
-    image: assets.p_img1,
+    image: assets.p_img2_1 || assets.p_img4,
     count: '24+ Items',
     badge: 'Trending'
   },
@@ -18,7 +18,7 @@ const categories = [
     id: 'Women',
     name: "Women's Fashion",
     tagline: 'Elegant Dresses & Chic Apparel',
-    image: assets.p_img2,
+    image: assets.p_img5,
     count: '32+ Items',
     badge: 'Popular'
   },

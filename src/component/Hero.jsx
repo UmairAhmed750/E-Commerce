@@ -48,21 +48,21 @@ const Hero = () => {
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            className='prata-regular text-2xl sm:text-3xl lg:text-3xl xl:text-4xl leading-[1.2] font-medium my-1.5 tracking-tight text-gray-900 dark:text-white'
+            className='font-playfair text-3xl sm:text-4xl lg:text-4xl xl:text-5xl leading-[1.15] font-extrabold my-2.5 tracking-tight text-gray-900 dark:text-white'
           >
             Redefining Modern <br />
-            <span className="inline-block relative h-[1.25em] overflow-hidden align-bottom min-w-[220px] sm:min-w-[280px]">
+            <span className="inline-block relative h-[1.3em] overflow-hidden align-bottom min-w-[240px] sm:min-w-[340px]">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={words[index]}
-                  initial={{ y: 25, opacity: 0, filter: 'blur(4px)' }}
+                  initial={{ y: 30, opacity: 0, filter: 'blur(6px)' }}
                   animate={{ y: 0, opacity: 1, filter: 'blur(0px)' }}
-                  exit={{ y: -25, opacity: 0, filter: 'blur(4px)' }}
-                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                  className='bg-gradient-to-r from-orange-600 via-amber-500 to-orange-500 bg-clip-text text-transparent italic font-serif block'
+                  exit={{ y: -30, opacity: 0, filter: 'blur(6px)' }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  className='bg-gradient-to-r from-orange-500 via-amber-400 to-orange-600 bg-clip-text text-transparent italic font-cormorant font-semibold block tracking-normal drop-shadow-sm'
                 >
                   {words[index]}
                 </motion.span>

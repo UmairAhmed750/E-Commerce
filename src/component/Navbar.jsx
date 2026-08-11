@@ -3,11 +3,43 @@ import { assets } from '../assets/frontend_assets/assets';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { ShopContext } from '../context/ShopContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Sun, Moon, Search, User, ShoppingBag, Menu, ChevronLeft, X } from 'lucide-react';
+import { Sun, Moon, Search, User, ShoppingBag, Menu, ChevronLeft, X, Heart, Scale, Globe, ShieldCheck } from 'lucide-react';
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, getCartCounts, theme, toggleTheme } = useContext(ShopContext);
+  const {
+    setShowSearch,
+    getCartCounts,
+    theme,
+    toggleTheme,
+    getWishlistCount,
+    selectedCurrencyCode,
+    CURRENCIES,
+    changeCurrency,
+    compareItems,
+    setIsCompareModalOpen,
+    isAdminLoggedIn,
+    supabaseUser,
+    user,
+    role,
+    userLogout
+  } = useContext(ShopContext);
+
+  const activeUser = user || (supabaseUser ? {
+    name: supabaseUser.user_metadata?.name || supabaseUser.email.split('@')[0],
+    email: supabaseUser.email
+  } : null);
+
+  const isUserAdmin = isAdminLoggedIn || role === 'admin' || activeUser?.email?.toLowerCase() === 'admin@gmail.com';
+
+  const displayName = isUserAdmin
+    ? 'Admin'
+    : (activeUser?.name || (activeUser?.email ? activeUser.email.split('@')[0] : null));
+
+  const initialLetter = isUserAdmin
+    ? 'A'
+    : (displayName ? displayName.charAt(0).toUpperCase() : null);
+
   const location = useLocation();
   const isCollectionPage = location.pathname.includes('collection');
 
@@ -65,14 +97,26 @@ const Navbar = () => {
       </ul>
 
       {/* Action Icons Right Section */}
-      <div className='flex items-center gap-2 sm:gap-5'>
+      <div className='flex items-center gap-1 sm:gap-3 shrink-0'>
+        {/* Dedicated Admin Panel Link (Only visible to Admin) */}
+        {isUserAdmin && (
+          <Link
+            to='/admin'
+            className='hidden sm:flex items-center gap-1.5 py-1.5 px-3 rounded-full bg-gradient-to-r from-orange-600 to-amber-500 text-white font-extrabold text-xs shadow-md shadow-orange-500/20 hover:scale-105 transition-all cursor-pointer'
+            title="Return to Admin Control Center"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span>Admin Panel</span>
+          </Link>
+        )}
+
         {/* Dark / Light Theme Toggle */}
         <motion.button
           variants={navItemVariants}
           whileHover="hover"
           whileTap="tap"
           onClick={toggleTheme}
-          className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors cursor-pointer text-gray-700 dark:text-yellow-400 focus:outline-none flex items-center justify-center'
+          className='p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors cursor-pointer text-gray-700 dark:text-yellow-400 focus:outline-none flex items-center justify-center'
           title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
           aria-label='Toggle Theme'
         >
@@ -90,37 +134,101 @@ const Navbar = () => {
             whileHover="hover"
             whileTap="tap"
             onClick={() => setShowSearch(true)}
-            className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200'
+            className='p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200'
             aria-label="Search"
           >
             <Search className="w-5 h-5 stroke-[2]" />
           </motion.button>
         )}
 
-        {/* Profile Icon with Dropdown */}
-        <div className='group relative'>
+        {/* Wishlist Icon */}
+        <motion.div variants={navItemVariants} whileHover="hover" whileTap="tap">
+          <Link to='/wishlist' className='relative p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200 block' title="Wishlist">
+            <Heart className="w-5 h-5 stroke-[2]" />
+            {getWishlistCount() > 0 && (
+              <motion.p
+                key={getWishlistCount()}
+                initial={{ scale: 0.6 }}
+                animate={{ scale: 1 }}
+                className='absolute right-0.5 bottom-0.5 w-4 text-center leading-4 bg-rose-500 text-white font-bold aspect-square rounded-full text-[9px] shadow-sm'
+              >
+                {getWishlistCount()}
+              </motion.p>
+            )}
+          </Link>
+        </motion.div>
+
+        {/* Profile Icon / User Avatar with Dropdown */}
+        <div className='group relative flex items-center'>
           <motion.div variants={navItemVariants} whileHover="hover" whileTap="tap">
-            <Link to={'/login'} className='p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200 block'>
-              <User className="w-5 h-5 stroke-[2]" />
-            </Link>
+            {initialLetter && displayName ? (
+              <Link
+                to='/profile'
+                className='flex items-center gap-1.5 py-1 px-1.5 sm:px-2.5 rounded-full bg-gray-100 dark:bg-gray-800/80 hover:bg-gray-200 dark:hover:bg-gray-700/80 transition-all border border-gray-200/80 dark:border-gray-700/80 shadow-sm cursor-pointer'
+                title={`${displayName} - View Profile`}
+              >
+                <div className='w-6 h-6 rounded-full bg-gradient-to-tr from-orange-500 via-amber-500 to-orange-600 text-white font-extrabold text-xs flex items-center justify-center shadow-md border border-white dark:border-gray-900 overflow-hidden shrink-0'>
+                  {user?.avatar ? (
+                    <img src={user.avatar} alt={displayName} className="w-full h-full object-cover" />
+                  ) : (
+                    <span>{initialLetter}</span>
+                  )}
+                </div>
+                <span className='hidden sm:inline-block text-xs font-bold text-gray-800 dark:text-gray-200 max-w-[110px] truncate'>
+                  {displayName}
+                </span>
+              </Link>
+            ) : (
+              <Link
+                to='/profile'
+                className='p-1.5 sm:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200 block relative cursor-pointer'
+                title="My Profile"
+              >
+                <User className="w-5 h-5 stroke-[2]" />
+              </Link>
+            )}
           </motion.div>
 
-          <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-2 z-50'>
+          <div className='group-hover:block hidden absolute dropdown-menu right-0 top-full pt-2 z-50'>
             <motion.div
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              className='flex flex-col gap-2 w-40 py-3 px-5 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800'
+              className='flex flex-col gap-2 w-44 py-3 px-4 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 rounded-xl shadow-xl border border-gray-200 dark:border-gray-800'
             >
-              <p className='cursor-pointer hover:text-black dark:hover:text-white transition-colors py-1 text-sm font-medium'>My Profile</p>
-              <p className='cursor-pointer hover:text-black dark:hover:text-white transition-colors py-1 text-sm font-medium'>Orders</p>
-              <p className='cursor-pointer hover:text-red-600 dark:hover:text-red-400 transition-colors py-1 text-sm font-medium text-red-500'>Logout</p>
+              {isUserAdmin && (
+                <Link to='/admin' className='cursor-pointer hover:text-orange-600 dark:hover:text-orange-400 transition-colors py-1 text-xs font-bold flex items-center gap-1.5 text-orange-600 dark:text-orange-400 border-b border-gray-100 dark:border-gray-800 pb-2'>
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Admin Portal</span>
+                </Link>
+              )}
+              <Link to='/profile' className='cursor-pointer hover:text-orange-600 dark:hover:text-orange-400 transition-colors py-1 text-xs font-semibold block'>
+                My Profile
+              </Link>
+              <Link to='/orders' className='cursor-pointer hover:text-orange-600 dark:hover:text-orange-400 transition-colors py-1 text-xs font-semibold block'>
+                My Orders
+              </Link>
+              {(initialLetter || activeUser) ? (
+                <button
+                  onClick={userLogout}
+                  className='cursor-pointer hover:text-red-600 dark:hover:text-red-400 transition-colors py-1 text-xs font-semibold text-red-500 pt-1 border-t border-gray-100 dark:border-gray-800 text-left w-full'
+                >
+                  Logout
+                </button>
+              ) : (
+                <Link
+                  to='/login'
+                  className='cursor-pointer hover:text-orange-600 dark:hover:text-orange-400 transition-colors py-1 text-xs font-semibold text-orange-600 dark:text-orange-400 pt-1 border-t border-gray-100 dark:border-gray-800 block'
+                >
+                  Sign In / Register
+                </Link>
+              )}
             </motion.div>
           </div>
         </div>
 
         {/* Cart Icon */}
         <motion.div variants={navItemVariants} whileHover="hover" whileTap="tap">
-          <Link to='/cart' className='relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200 block'>
+          <Link to='/cart' className='relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800/80 transition-colors text-gray-700 dark:text-gray-200 block' title="Shopping Cart">
             <ShoppingBag className="w-5 h-5 stroke-[2]" />
             <motion.p
               key={getCartCounts()}
@@ -181,8 +289,11 @@ const Navbar = () => {
                 {/* Navigation Links */}
                 <div className='flex flex-col py-2 divide-y divide-gray-100 dark:divide-gray-800/80 bg-white dark:bg-[#0b0f19]'>
                   {[
+                    ...(isUserAdmin ? [{ name: '⚡ Admin Portal', path: '/admin' }] : []),
                     { name: 'Home', path: '/' },
                     { name: 'Collection', path: '/collection' },
+                    { name: 'Wishlist', path: '/wishlist' },
+                    { name: 'Orders', path: '/orders' },
                     { name: 'About', path: '/about' },
                     { name: 'Contact', path: '/contact' }
                   ].map((link) => (
@@ -211,3 +322,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

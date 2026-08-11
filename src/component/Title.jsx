@@ -7,7 +7,7 @@ const Tittle = ({ text1, text2 }) => {
       <p className='text-gray-500 dark:text-gray-400 text-lg sm:text-xl font-light tracking-widest uppercase'>
         {text1} <span className='text-gray-900 dark:text-gray-100 font-semibold tracking-wider'>{text2}</span>
       </p>
-      <motion.p 
+      <motion.p
         initial={{ width: 10 }}
         whileInView={{ width: 48 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
